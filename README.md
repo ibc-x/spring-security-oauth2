@@ -9,9 +9,11 @@
 ```
 
 - Creer un premier utilisateur, dans postman ou autre client http:
- http://localhost:8080/api/v1/auth/register
+Endpoit: http://localhost:8080/api/v1/auth/register
+```
  {
     "username":"coun",
     "password":"coum",
     "fullName":"Councoumbré"
 }
+```
