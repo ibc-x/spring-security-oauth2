@@ -4,9 +4,12 @@ import java.util.List;
 
 import javax.crypto.spec.SecretKeySpec;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -15,8 +18,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
@@ -24,7 +25,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -39,9 +40,14 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
+    @Autowired
+    JWTtoUserConvertor jwtToUserConverter;
 
-	@Value("${jwt.secret}")
-	private String secreKey;
+	@Value("${jwt.access-secret}")
+	private String accessTokenSecretKey;
+
+	@Value("${jwt.refresh-secret}")
+	private String refreshTokenSecretKey;
 
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -67,15 +73,39 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public JwtDecoder jwtDecoder() {
-		SecretKeySpec secretKeySpec=new SecretKeySpec(this.secreKey.getBytes(),"RSA");
+    @Primary
+	public JwtDecoder jwtAccessTokenDecoder() {
+		SecretKeySpec secretKeySpec=new SecretKeySpec(this.accessTokenSecretKey.getBytes(),"RSA");
 		return NimbusJwtDecoder.withSecretKey(secretKeySpec).macAlgorithm(MacAlgorithm.HS512).build();
 	}
 
 	@Bean
-	public JwtEncoder jwtEncoder() {
-		return new NimbusJwtEncoder(new ImmutableSecret<>(this.secreKey.getBytes()));
+    @Primary
+	public JwtEncoder jwtAccessTokenEncoder() {
+		return new NimbusJwtEncoder(new ImmutableSecret<>(this.accessTokenSecretKey.getBytes()));
 	}
+
+
+    @Bean
+    @Qualifier("jwtRefreshTokenDecoder")
+    JwtDecoder jwtRefreshTokenDecoder() {
+        SecretKeySpec secretKeySpec=new SecretKeySpec(this.refreshTokenSecretKey.getBytes(),"RSA");
+		return NimbusJwtDecoder.withSecretKey(secretKeySpec).macAlgorithm(MacAlgorithm.HS512).build();
+    }
+
+    @Bean
+    @Qualifier("jwtRefreshTokenEncoder")
+    JwtEncoder jwtRefreshTokenEncoder() {
+        return new NimbusJwtEncoder(new ImmutableSecret<>(this.refreshTokenSecretKey.getBytes()));
+    }
+
+    @Bean
+    @Qualifier("jwtRefreshTokenAuthProvider")
+    JwtAuthenticationProvider jwtRefreshTokenAuthProvider() {
+        JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtRefreshTokenDecoder());
+        provider.setJwtAuthenticationConverter(jwtToUserConverter);
+        return provider;
+    }
 
 	@Bean
 	public AuthenticationManager authenticationManager(UserDetailsService userDetailsService) {
