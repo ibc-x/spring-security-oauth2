@@ -1,4 +1,4 @@
-package com.ic.ioauth2.enumeration;
+package com.ic.oauth2.enumeration;
 
 public enum Role {
     USER,

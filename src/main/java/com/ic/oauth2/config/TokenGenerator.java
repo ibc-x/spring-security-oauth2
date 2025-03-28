@@ -1,4 +1,4 @@
-package com.ic.ioauth2.config;
+package com.ic.oauth2.config;
 
 import java.text.MessageFormat;
 import java.time.Duration;
@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,15 +18,16 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import com.ic.ioauth2.dto.TokenDTO;
-import com.ic.ioauth2.model.CustomUser;
+import com.ic.oauth2.dto.TokenDTO;
+
+import lombok.RequiredArgsConstructor;
 
 
 @Service
+@RequiredArgsConstructor
 public class TokenGenerator {
 
-    @Autowired
-	private JwtEncoder jwtEncoder;
+	private final JwtEncoder jwtEncoder;
 
     /**
      * @param subject entity / utilisateur
@@ -48,9 +48,7 @@ public class TokenGenerator {
 			JwtEncoderParameters.from(
 			JwsHeader.with(MacAlgorithm.HS512).build(),jwtClaimsSet);
 
-			String jwt=jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
-
-        return jwt;
+			return jwtEncoder.encode(jwtEncoderParameters).getTokenValue();
     }
 
     private String createAccessToken(Authentication authentication) {
@@ -70,12 +68,11 @@ public class TokenGenerator {
     public TokenDTO createToken(Authentication authentication) {
         if (!(authentication.getPrincipal() instanceof User)) {
             throw new BadCredentialsException(
-                    MessageFormat.format("principal {0} is not of User type", authentication.getPrincipal().getClass())
+                    MessageFormat.format("principal {0} is not of User type ", authentication.getPrincipal().getClass())
             );
         }
 
         TokenDTO tokenDTO = new TokenDTO();
-        //tokenDTO.setUserId(user.getId());
         tokenDTO.setAccessToken(createAccessToken(authentication));
 
         String refreshToken;

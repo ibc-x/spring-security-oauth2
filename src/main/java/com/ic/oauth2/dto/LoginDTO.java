@@ -1,4 +1,4 @@
-package com.ic.ioauth2.dto;
+package com.ic.oauth2.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -1,4 +1,4 @@
-package com.ic.ioauth2.model;
+package com.ic.oauth2.model;
 
 
 import java.util.Collection;
@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.ic.ioauth2.enumeration.Role;
+import com.ic.oauth2.enumeration.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +21,7 @@ import lombok.Data;
 
 @Entity(name = "user")
 @Data
-public class CustomUser implements UserDetails{
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

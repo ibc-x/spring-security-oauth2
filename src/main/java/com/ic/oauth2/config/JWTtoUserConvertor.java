@@ -1,4 +1,4 @@
-package com.ic.ioauth2.config;
+package com.ic.oauth2.config;
 
 
 import java.util.Collections;
@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
-import com.ic.ioauth2.model.CustomUser;
+import com.ic.oauth2.model.User;
 
 
 
@@ -18,9 +18,8 @@ public class JWTtoUserConvertor implements Converter<Jwt, UsernamePasswordAuthen
 
     @Override
     public UsernamePasswordAuthenticationToken convert(Jwt source) {
-        CustomUser user = new CustomUser();
+        User user = new User();
             user.setLogin(source.getSubject());
-            //user.setId(source.getSubject());
             return new UsernamePasswordAuthenticationToken(user, source, Collections.emptyList());
     }
     

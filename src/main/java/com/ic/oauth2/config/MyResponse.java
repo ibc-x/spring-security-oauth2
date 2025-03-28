@@ -1,4 +1,4 @@
-package com.ic.ioauth2.config;
+package com.ic.oauth2.config;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

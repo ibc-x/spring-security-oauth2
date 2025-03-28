@@ -1,11 +1,9 @@
-package com.ic.ioauth2.config;
+package com.ic.oauth2.config;
 
 import java.util.List;
 
 import javax.crypto.spec.SecretKeySpec;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -30,18 +27,18 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-//import org.springframework.web.filter.CorsFilter;
 
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
+
+import lombok.RequiredArgsConstructor;
 
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    JWTtoUserConvertor jwtToUserConverter;
+    private final JWTtoUserConvertor jwtToUserConverter;
 
 	@Value("${jwt.access-secret}")
 	private String accessTokenSecretKey;
@@ -86,21 +83,18 @@ public class SecurityConfig {
 	}
 
 
-    @Bean
-    @Qualifier("jwtRefreshTokenDecoder")
+    @Bean(name = "jwtRefreshTokenDecoder")
     JwtDecoder jwtRefreshTokenDecoder() {
         SecretKeySpec secretKeySpec=new SecretKeySpec(this.refreshTokenSecretKey.getBytes(),"RSA");
 		return NimbusJwtDecoder.withSecretKey(secretKeySpec).macAlgorithm(MacAlgorithm.HS512).build();
     }
 
-    @Bean
-    @Qualifier("jwtRefreshTokenEncoder")
+    @Bean(name = "jwtRefreshTokenEncoder")
     JwtEncoder jwtRefreshTokenEncoder() {
         return new NimbusJwtEncoder(new ImmutableSecret<>(this.refreshTokenSecretKey.getBytes()));
     }
 
-    @Bean
-    @Qualifier("jwtRefreshTokenAuthProvider")
+    @Bean(name="jwtRefreshTokenAuthProvider")
     JwtAuthenticationProvider jwtRefreshTokenAuthProvider() {
         JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtRefreshTokenDecoder());
         provider.setJwtAuthenticationConverter(jwtToUserConverter);
