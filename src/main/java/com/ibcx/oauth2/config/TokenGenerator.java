@@ -1,4 +1,4 @@
-package com.ic.oauth2.config;
+package com.ibcx.oauth2.config;
 
 import java.text.MessageFormat;
 import java.time.Duration;
@@ -18,7 +18,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Service;
 
-import com.ic.oauth2.dto.TokenDTO;
+import com.ibcx.oauth2.dto.TokenDTO;
 
 import lombok.RequiredArgsConstructor;
 

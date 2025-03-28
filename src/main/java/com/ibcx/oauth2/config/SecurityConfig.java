@@ -1,4 +1,4 @@
-package com.ic.oauth2.config;
+package com.ibcx.oauth2.config;
 
 import java.util.List;
 

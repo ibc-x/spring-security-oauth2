@@ -1,4 +1,4 @@
-package com.ic.oauth2.dto;
+package com.ibcx.oauth2.dto;
 
 import lombok.Data;
 

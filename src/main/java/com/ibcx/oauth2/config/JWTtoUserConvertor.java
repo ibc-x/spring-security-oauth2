@@ -1,4 +1,4 @@
-package com.ic.oauth2.config;
+package com.ibcx.oauth2.config;
 
 
 import java.util.Collections;
@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
-import com.ic.oauth2.model.User;
+import com.ibcx.oauth2.model.User;
 
 
 

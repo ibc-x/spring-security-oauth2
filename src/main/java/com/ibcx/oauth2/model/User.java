@@ -1,4 +1,4 @@
-package com.ic.oauth2.model;
+package com.ibcx.oauth2.model;
 
 
 import java.util.Collection;
@@ -8,7 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.ic.oauth2.enumeration.Role;
+import com.ibcx.oauth2.enumeration.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

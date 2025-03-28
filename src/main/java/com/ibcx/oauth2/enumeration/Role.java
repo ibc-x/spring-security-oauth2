@@ -1,4 +1,4 @@
-package com.ic.oauth2.enumeration;
+package com.ibcx.oauth2.enumeration;
 
 public enum Role {
     USER,

@@ -1,4 +1,4 @@
-package com.ic.oauth2.controller;
+package com.ibcx.oauth2.controller;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -20,12 +20,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ic.oauth2.config.TokenGenerator;
-import com.ic.oauth2.dto.LoginDTO;
-import com.ic.oauth2.dto.RegisterUserDTO;
-import com.ic.oauth2.dto.TokenDTO;
-import com.ic.oauth2.model.User;
-import com.ic.oauth2.service.CustomUserService;
+import com.ibcx.oauth2.config.TokenGenerator;
+import com.ibcx.oauth2.dto.LoginDTO;
+import com.ibcx.oauth2.dto.RegisterUserDTO;
+import com.ibcx.oauth2.dto.TokenDTO;
+import com.ibcx.oauth2.model.User;
+import com.ibcx.oauth2.service.CustomUserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,7 +51,6 @@ public class SecurityController {
 	
 	@GetMapping("/profile")
 	Authentication authentication(Authentication authentication) {
-		System.out.println("type principal:  "+authentication.getPrincipal().getClass());
 		return authentication;
 	}
 

@@ -1,4 +1,4 @@
-package com.ic.oauth2.config;
+package com.ibcx.oauth2.config;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +8,10 @@ import java.util.HashMap;
 
 
 public class MyResponse {
+
+    private MyResponse(){
+        throw new IllegalStateException("Classe MyReponse");
+    }
 
      /**
      * @param status le status de la reponse HttpStatus
